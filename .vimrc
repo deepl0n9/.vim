@@ -2,6 +2,8 @@
 
 """""""""""""""""""""""""""""""""""""
 " jika ingin agar .vimrx ada di folder.vim "sudo ln -s ~/dotfiles/.vimrc ~/.vimrc"
+" lalu buat folder "git/dotfiles/ pindahkan .vim folder kesitu lalu symlink "
+" "dengan cara 'sudo ln -s ~/git/dotfiles/.vim <spasi> ~/.vim' ""
 set nocompatible
 set encoding=utf-8
 let mapleader = ","
@@ -19,63 +21,76 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 " Utility
+"=========================
+"
+" * goyo default : ketik :Goyo
 Plugin 'junegunn/goyo.vim'
+Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'ervandew/supertab'
 Plugin 'SilVer/ultisnips'
 Plugin 'benmills/vimux'
 Plugin 'Shougo/neocomplete.vim'
 Plugin 'scrooloose/nerdtree'
+" *  multiple cursors default : masuk visual mode, select teks -> C-n dan lompat kesama
+" teks juga C-n, kembali C-p skip teks C-x
 Plugin 'terryma/vim-multiple-cursors'
 
-" ncm2 completion
 
 
-" Generic Programming Support 
+" ======== Generic Programming Support 
+"=========================
 Plugin 'ycm-core/YouCompleteMe'
 Plugin 'boeckmann/vim-freepascal'
 Plugin 'Townk/vim-autoclose'
+" * tcomment default : pilih teks/code yg ingin di jadikan komen (vice versa)
+" lalu ketik :gc
 Plugin 'tomtom/tcomment_vim'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'neomake/neomake'
 
-"git
+"======== git plugin
+"=========================
+
 Plugin 'tpope/vim-fugitive'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
-"----------git-plugin-----
-map <leader>g :Git  
 
 
 
 
 
-" Theme / Interface
 
 
-" Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
 """" END Vundle Configuration 
 """""""""""""""""""""""""""""""""""""
-"tagbar
-"g:tagbar_ctags_bin
+
+
+
+"======== <leader> mapping
+"=========================
+
+map <leader>q :q!<CR>
+map <leader>w :wq<CR>
+map <leader>g :Git 
+"map <leader>u :UltiSnipsAddFiletypes 
+map <leader>e :w<CR>
+map <leader>u :UltiSnipsEdit 
+
+" map to switch window with ", and hjkl" instead of <C-w>
+nnoremap <leader>m <C-w>
+
 
 " Configuration Section
 """""""""""""""""""""""""""""""""""""
-"ctags
 
 " OSX stupid backspace fix
 set backspace=indent,eol,start
-" map ",q" to quit not saving, ",w" quit with saving
-map <leader>q :q!<CR>
-map <leader>w :wq<CR>
-" ",s" to save without quit "
 
 ""set ESC to jj
 inoremap jj <ESC>
-" map to switch window with ", and hjkl" instead of <C-w>
-nnoremap <leader>m <C-w>
 
 " Show linenumbers
 set number
@@ -88,33 +103,28 @@ set smarttab
 set title
 set statusline+=%=%l:%c
 set statusline=[%n]\ [%t]
-
 set expandtab
-
 " Always display the status line
 set laststatus=2
-
 " Enable Elite mode, No ARRRROWWS!!!!
 let g:elite_mode=1
+if get(g:, 'elite_mode')
+	nnoremap <Up>    :resize +2<CR>
+	nnoremap <Down>  :resize -2<CR>
+	nnoremap <Left>  :vertical resize +2<CR>
+	nnoremap <Right> :vertical resize -2<CR>
+endif
+
+
 "no arrow setting
-
-
-
 " Enable highlighting of the current line
 set cursorline
-
 " Theme and Styling 
 syntax on
 set t_Co=256
-set background=light
-
-" if (has("termguicolors"))
-"   set termguicolors
-" endif
-
-
-
 "let base16colorspace=256  " Access colors present in 256 colorspace
+set background=light
+" colorscheme
 colorscheme spacegray 
 let g:spacegray_low_contrast = 1
  
@@ -132,12 +142,13 @@ nmap <F7> :lprev<CR>
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
+" java dikosongkan agar tidak konflik denga ycm
 let g:syntastic_java_checkers = []
-" let g:syntastic_check_on_wq = 0
-" let g:syntastic_enable_elixir_checker = 1
-" let g:syntastic_elixir_checkers = ["elixir"]
+""=========================
+
 
 " YouCompleteMe setting
+""=========================
 let g:ycm_python_interpreter_path = ''
 let g:ycm_python_sys_path = []
 let g:ycm_extra_conf_vim_data = [
@@ -158,16 +169,17 @@ augroup markdown
     au!
     au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
 augroup END
+"=========================
 
 
 " Vim-Supertab Configuration
+""=========================
 let g:SuperTabDefaultCompletionType = "<C-x><C-o>"
+""=========================
 
-"ncm2
 " Vim-UtilSnips Configuration
+"=========================
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-map <leader>u :UltiSnipsAddFiletypes 
-map <leader>e :UltiSnipsEdit 
 
 let g:UltiSnipsExpandTrigger="<C-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
@@ -175,10 +187,12 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsEditSplit="vertical" " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsSnippetsDir = "~/.vim/bundle/ultisnips/Ultisnips"
 
-" Vim-Test Configuration
-let test#strategy = "vimux"
+"=========================
+
 
 " Neocomplete Settings
+"=========================
+
 let g:acp_enableAtStartup = 0
 let g:neocomplete#enable_at_startup = 1
 let g:neocomplete#enable_smart_case = 1
@@ -203,23 +217,38 @@ function! s:my_cr_function()
   "return pumvisible() ? "\<C-y>" : "\<CR>"
 endfunction
 
-" Close popup by <Space>.
-"inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
+" NOTES tadi dari sini kebawah komen
 
-" vim-mix-format
-" let g:mix_format_on_save = 1
+"Close popup by <Space>.
+inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
 
-" AutoComplPop like behavior.
-"let g:neocomplete#enable_auto_select = 1
+"vim-mix-format
+let g:mix_format_on_save = 1
 
+"AutoComplPop like behavior.
+let g:neocomplete#enable_auto_select = 1
+" sampe sini
+
+"neocomplete mapping
+inoremap <expr><C-g>     neocomplete#undo_completion()
+inoremap <expr><C-l>     neocomplete#complete_common_string()
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+
+" 1 <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+
+" 2 <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+"=========================END neocomplete=========================
 
 " Enable omni completion.
+"=========================
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-
 " Enable heavy omni completion.
 if !exists('g:neocomplete#sources#omni#input_patterns')
   let g:neocomplete#sources#omni#input_patterns = {}
@@ -232,55 +261,27 @@ let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
 " https://github.com/c9s/perlomni.vim
 let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
+"NOTES yang omni heavy jadiin komen semua atau disesuaikan aja
+"================================================
 
 
 
-"""""""""""""""""""""""""""""""""""""
-" Mappings configurationn
-"""""""""""""""""""""""""""""""""""""
-map <C-i> :NERDTreeToggle<CR>
 "map <C-m> :TagbarToggle<CR>
 
 " NERDTree
+"=========================
+
 let NERDTreeShowHidden = 1
 let NERDTreeShowBookmarks = 1
 let NERDTreeMinimalUI = 1
 let NERDTreeeDirArrows = 1
-" Omnicomplete Better Nav
-"inoremap <expr> <c-j> ("\<C-n>")
-"inoremap <expr> <c-k> ("\<C-p>")
 
-" Neocomplete Plugin mappins
-inoremap <expr><C-g>     neocomplete#undo_completion()
-inoremap <expr><C-l>     neocomplete#complete_common_string()
-
-" Recommended key-mappings.
-" <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+map <C-i> :NERDTreeToggle<CR>
+"=========================
 
 
-" Shortcuts
-nnoremap <Leader>o :Files<CR> 
-nnoremap <Leader>O :CtrlP<CR>
-nnoremap <Leader>w :w<CR>
 
 
-" Disable arrow movement, resize splits instead.
-if get(g:, 'elite_mode')
-	nnoremap <Up>    :resize +2<CR>
-	nnoremap <Down>  :resize -2<CR>
-	nnoremap <Left>  :vertical resize +2<CR>
-	nnoremap <Right> :vertical resize -2<CR>
-endif
-
-"map <silent> <LocalLeader>ws :highlight clear ExtraWhitespace<CR>
 
 
 
