@@ -86,7 +86,7 @@ map <leader>go :GitGutterLineHighlightsDisable<CR>
 
 
 " map to switch window with ", and hjkl" instead of <C-w>
-nnoremap <leader>m <C-w>
+inoremap <leader>b <C-w>
 
 
 " Configuration Section
@@ -163,18 +163,8 @@ let g:ycm_extra_conf_vim_data = [
   \]
 let g:ycm_global_ycm_extra_conf = '~/global_extra_conf.py'
 
-" Neomake settings
-autocmd! BufWritePost * Neomake
-let g:neomake_elixir_enabled_makers = ['mix', 'credo', 'dogma']
 
-" Vim-PDV Configuration 
-let g:pdv_template_dir = $HOME ."/.vim/bundle/pdv/templates_snip"
 
-" Markdown Syntax Support
-augroup markdown
-    au!
-    au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
-augroup END
 "=========================
 
 " ===== gitgutter ==== 
@@ -192,7 +182,7 @@ let g:gitgutter_sign_modified_removed = 'ww'
 
 " Vim-Supertab Configuration
 ""=========================
-let g:SuperTabDefaultCompletionType = "<C-x><C-o>"
+let g:SuperTabDefaultCompletionType = "<TAB>"
 ""=========================
 
 " Vim-UtilSnips Configuration
@@ -229,28 +219,52 @@ if !exists('g:neocomplete#keyword_patterns')
 endif
 let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 
-function! s:my_cr_function()
-  return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-  " For no inserting <CR> key.
-  "return pumvisible() ? "\<C-y>" : "\<CR>"
+" default pumvisible(
+" function! s:my_cr_function()
+"   return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+"    For no inserting <CR> key.
+"   return pumvisible() ? "\<C-y>" : "\<CR>"
+" endfunction
+
+" function! s:CRComplete()
+"     if empty(v:completed_item)
+"     execute "norm! i\<CR>"
+"     endif
+" endfunction
+"     inoremap <CR> <LEFT><RIGHT><C-O>:call <SID>CRComplete()<CR>
+function! s:ExpandSnippetOrClosePumOrReturnNewline()
+    if pumvisible()
+    if !empty(v:completed_item)
+        let snipet = UltiSnips#ExpandSnippet()
+        if g:ulti_expand_res >  0
+            return snippet
+        else 
+            return "\<C-y>"
+        endif
+    else
+        return "\<C-y>\<CR>"
+    endif
+else
+    return "\<CR>"
+endif
 endfunction
+inoremap <silent> <CR> <C-r>=<SID>ExpandSnippetOrClosePumOrReturnNewline()<CR>
 
-" NOTES tadi dari sini kebawah komen
-
-"Close popup by <Space>.
-inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
-
+"
+"NOTES tadi dari sini kebawah komen
+    
+" "Close popup by <Space>.
+" inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
+"
 "vim-mix-format
 let g:mix_format_on_save = 1
 
-"AutoComplPop like behavior.
-let g:neocomplete#enable_auto_select = 1
 " sampe sini
 
 "neocomplete mapping
 inoremap <expr><C-g>     neocomplete#undo_completion()
 inoremap <expr><C-l>     neocomplete#complete_common_string()
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+""inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 
 " 1 <TAB>: completion.
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
