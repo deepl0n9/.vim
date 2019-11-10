@@ -32,6 +32,9 @@ Plugin 'SilVer/ultisnips'
 Plugin 'benmills/vimux'
 Plugin 'Shougo/neocomplete.vim'
 Plugin 'scrooloose/nerdtree'
+" command nya " cs'(untuktambah karakter) cs(untukganti karakter)' "
+" command delete ds
+Plugin 'tpope/vim-surround'
 " *  multiple cursors default : masuk visual mode, select teks -> C-n dan lompat kesama
 " teks juga C-n, kembali C-p skip teks C-x
 Plugin 'terryma/vim-multiple-cursors'
@@ -54,8 +57,8 @@ Plugin 'neomake/neomake'
 
 Plugin 'tpope/vim-fugitive'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
-
-
+Plugin 'airblade/vim-gitgutter'
+Plugin 'jiangmiao/auto-pairs'
 
 
 
@@ -78,6 +81,9 @@ map <leader>g :Git
 "map <leader>u :UltiSnipsAddFiletypes 
 map <leader>e :w<CR>
 map <leader>u :UltiSnipsEdit 
+map <leader>gn :GitGutterLineHighlightsEnable<CR>
+map <leader>go :GitGutterLineHighlightsDisable<CR>
+
 
 " map to switch window with ", and hjkl" instead of <C-w>
 nnoremap <leader>m <C-w>
@@ -171,6 +177,18 @@ augroup markdown
 augroup END
 "=========================
 
+" ===== gitgutter ==== 
+"======================
+
+"let g:gitgutter_highlight_lines = 1
+nmap ]h <Plug>(GitGutterNextHunk)
+nmap [h <Plug>(GitGutterPrevHunk)
+" stage gitgutter way "<leader>hs dan undo dengan <leader>hu""
+let g:gitgutter_sign_added = '+'
+let g:gitgutter_sign_modified = 'o'
+let g:gitgutter_sign_removed = 'xx'
+let g:gitgutter_sign_removed_first_line = '^^'
+let g:gitgutter_sign_modified_removed = 'ww'
 
 " Vim-Supertab Configuration
 ""=========================
