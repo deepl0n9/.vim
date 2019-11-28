@@ -32,8 +32,8 @@ Plugin 'SilVer/ultisnips'
 Plugin 'benmills/vimux'
 Plugin 'Shougo/neocomplete.vim'
 Plugin 'scrooloose/nerdtree'
-" command nya " cs'(untuktambah karakter) cs(untukganti karakter)' "
-" command delete ds
+Plugin 'ludovicchabant/vim-gutentags'
+Plugin 'majutsushi/tagbar'
 Plugin 'tpope/vim-surround'
 " *  multiple cursors default : masuk visual mode, select teks -> C-n dan lompat kesama
 " teks juga C-n, kembali C-p skip teks C-x
@@ -46,8 +46,8 @@ Plugin 'terryma/vim-multiple-cursors'
 Plugin 'ycm-core/YouCompleteMe'
 Plugin 'boeckmann/vim-freepascal'
 Plugin 'Townk/vim-autoclose'
-" * tcomment default : pilih teks/code yg ingin di jadikan komen (vice versa)
-" lalu ketik :gc
+" * tcomment default : pilih teks/code(visual mode) yg ingin di jadikan komen (vice versa)
+" lalu ketik gc
 Plugin 'tomtom/tcomment_vim'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'neomake/neomake'
@@ -78,7 +78,6 @@ filetype plugin indent on    " required
 map <leader>q :q!<CR>
 map <leader>w :wq<CR>
 map <leader>g :Git 
-"map <leader>u :UltiSnipsAddFiletypes 
 map <leader>e :w<CR>
 map <leader>u :UltiSnipsEdit 
 map <leader>gn :GitGutterLineHighlightsEnable<CR>
@@ -134,6 +133,22 @@ set background=light
 colorscheme spacegray 
 let g:spacegray_low_contrast = 1
  
+" ====== guttentags =====
+set statusline+=%{gutentags#statusline()}
+" let g:gutentags_project_root = ['.git']
+let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
+"Use the following command to clear the cache quickly:
+"
+"command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir . '/*')
+let g:gutentags_exclude = ['*.css', '*.html', '*.js', '*.json', '*.xml',
+                            \ '*.phar', '*.ini', '*.rst', '*.md',
+                            \ '*vendor/*/test*', '*vendor/*/Test*',
+                            \ '*vendor/*/fixture*', '*vendor/*/Fixture*',
+                            \ '*var/cache*', '*var/log*']
+let g:gutentags_generate_on_new = 1
+let g:gutentags_generate_on_missing = 1
+let g:gutentags_generate_on_write = 1
+let g:gutentags_generate_on_empty_buffer = 0
 
 " Syntastic Configuration
 set statusline+=%#warningmsg#
@@ -148,8 +163,7 @@ nmap <F7> :lprev<CR>
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
-" java dikosongkan agar tidak konflik denga ycm
-let g:syntastic_java_checkers = []
+let g:syntastic_mode_map = { 'passive_filetypes': ['java']  }
 ""=========================
 
 
@@ -174,11 +188,16 @@ let g:ycm_global_ycm_extra_conf = '~/global_extra_conf.py'
 nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
 " stage gitgutter way "<leader>hs dan undo dengan <leader>hu""
+let g:gitgutter_override_sign_column_highlight = 1
+highlight SignColumn guibg=bg
+highlight SignColumn ctermbg=bg
+" update sign colum every quarter second = default is 4000
+set updatetime=250
 let g:gitgutter_sign_added = '+'
 let g:gitgutter_sign_modified = 'o'
-let g:gitgutter_sign_removed = 'xx'
-let g:gitgutter_sign_removed_first_line = '^^'
-let g:gitgutter_sign_modified_removed = 'ww'
+let g:gitgutter_sign_removed = 'x'
+let g:gitgutter_sign_removed_first_line = '^'
+let g:gitgutter_sign_modified_removed = 'w'
 
 " Vim-Supertab Configuration
 ""=========================
@@ -250,16 +269,19 @@ endif
 endfunction
 inoremap <silent> <CR> <C-r>=<SID>ExpandSnippetOrClosePumOrReturnNewline()<CR>
 
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 "
-"NOTES tadi dari sini kebawah komen
     
 " "Close popup by <Space>.
 " inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
 "
+
+
+
 "vim-mix-format
 let g:mix_format_on_save = 1
 
-" sampe sini
 
 "neocomplete mapping
 inoremap <expr><C-g>     neocomplete#undo_completion()
@@ -281,6 +303,8 @@ autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+autocmd FileType java setlocal omnifunc=javaComplete#Complete
+autocmd Filetype java setlocal completefunc=javacomplete#CompleteParamsInfo
 " Enable heavy omni completion.
 if !exists('g:neocomplete#sources#omni#input_patterns')
   let g:neocomplete#sources#omni#input_patterns = {}
@@ -298,7 +322,6 @@ let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
 
 
-"map <C-m> :TagbarToggle<CR>
 
 " NERDTree
 "=========================
