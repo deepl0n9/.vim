@@ -1,31 +1,62 @@
-"""""""""""""""""""""""""""""""""""""
 
-"""""""""""""""""""""""""""""""""""""
-" jika ingin agar .vimrx ada di folder.vim "sudo ln -s ~/dotfiles/.vimrc ~/.vimrc"
+"""""""""""""NOTES""""""""""""""""""""""""
+" jika ingin agar .vimrc dan folder .vim ada di folder dotfiles "untuk bisa di backup di git | sudo ln -s ~/dotfiles/.vimrc ~/.vimrc"
 " lalu buat folder "git/dotfiles/ pindahkan .vim folder kesitu lalu symlink "
 " "dengan cara 'sudo ln -s ~/git/dotfiles/.vim <spasi> ~/.vim' ""
+
+
+""""""""""""end NOTES"""""""""""""""""""""""""
+
+" default settings 
+"""""""""""""""""""""""""""""""""""""
+
+""set ESC to jj
+inoremap jj <ESC>
+set backspace=indent,eol,start
+syntax on
 set nocompatible
 set encoding=utf-8
-let mapleader = ","
+set number " Show linenumbers
+set nowrap " :set wrap if want to wrap text sometimes
+"set tabstop=4
+set shiftwidth=4
+set smarttab
+set title
+set statusline+=%=%l:%c
+set statusline=[%n]\ [%t]
+set expandtab
+set laststatus=2
+set cursorline
+set t_Co=256
+set background=light
+colorscheme spacegray " colorscheme
+let g:spacegray_low_contrast = 1
+ " Enable Elite mode, No ARRRROWWS!!!!
+let g:elite_mode=1
+if get(g:, 'elite_mode')
+	nnoremap <Up>    :resize +2<CR>
+	nnoremap <Down>  :resize -2<CR>
+	nnoremap <Left>  :vertical resize +2<CR>
+	nnoremap <Right> :vertical resize -2<CR>
+endif
+" end elite mode 
+" airline
+let g:airline_theme='minimalist'
+""""""""""""""end default setting"""""""""""""""""""""""
 
-"""" START Vundle Configuration 
+" ===== vundle Configuration 
 
-" Disable file type for vundle
 filetype off                  " required
 
-" set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-
-" let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
+Plugin 'gmarik/Vundle.vim'  " let Vundle manage Vundle, required
 
 " Utility
 "=========================
-"
-" * goyo default : ketik :Goyo
-Plugin 'junegunn/goyo.vim'
-Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
+
+
+Plugin 'junegunn/goyo.vim' "goyo default : ketik :Goyo
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'ervandew/supertab'
 Plugin 'SilVer/ultisnips'
@@ -35,46 +66,47 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'ludovicchabant/vim-gutentags'
 Plugin 'majutsushi/tagbar'
 Plugin 'tpope/vim-surround'
-" *  multiple cursors default : masuk visual mode, select teks -> C-n dan lompat kesama
-" teks juga C-n, kembali C-p skip teks C-x
-Plugin 'terryma/vim-multiple-cursors'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'ryanoasis/vim-devicons'
+Plugin 'terryma/vim-multiple-cursors' " multiple cursors default : masuk visual mode, select teks -> C-n dan lompat ke teks yang sama juga C-n, kembali C-p skip teks C-x
+Plugin 'junegunn/vim-easy-align'
+Plugin 'nathanaelkane/vim-indent-guides' 
 
-
+"=========================
 
 " ======== Generic Programming Support 
-"=========================
 Plugin 'ycm-core/YouCompleteMe'
 Plugin 'boeckmann/vim-freepascal'
-Plugin 'Townk/vim-autoclose'
-" * tcomment default : pilih teks/code(visual mode) yg ingin di jadikan komen (vice versa)
-" lalu ketik gc
-Plugin 'tomtom/tcomment_vim'
+Plugin 'pangloss/vim-javascript'
+Plugin 'tomtom/tcomment_vim'  " * tcomment default : pilih teks/code(visual mode) yg ingin di jadikan komen (vice versa) lalu ketik gc
 Plugin 'vim-syntastic/syntastic'
-Plugin 'neomake/neomake'
+Plugin 'mattn/emmet-vim'
+
+"=========================
+
 
 "======== git plugin
-"=========================
 
 Plugin 'tpope/vim-fugitive'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'jiangmiao/auto-pairs'
 
-
+"=========================
 
 
 
 
 call vundle#end()            " required
 filetype plugin indent on    " required
-"""" END Vundle Configuration 
+"""" end vundle Configuration 
 """""""""""""""""""""""""""""""""""""
 
 
 
 "======== <leader> mapping
-"=========================
-
+let mapleader = ","
 map <leader>q :q!<CR>
 map <leader>w :wq<CR>
 map <leader>g :Git 
@@ -82,93 +114,65 @@ map <leader>e :w<CR>
 map <leader>u :UltiSnipsEdit 
 map <leader>gn :GitGutterLineHighlightsEnable<CR>
 map <leader>go :GitGutterLineHighlightsDisable<CR>
-
-
-" map to switch window with ", and hjkl" instead of <C-w>
-inoremap <leader>b <C-w>
-
-
-" Configuration Section
 """""""""""""""""""""""""""""""""""""
 
-" OSX stupid backspace fix
-set backspace=indent,eol,start
+"==== plugin mapping
 
-""set ESC to jj
-inoremap jj <ESC>
-
-" Show linenumbers
-set number
-set nowrap
-"no wrap text
-" Set Proper Tabs
-set tabstop=4
-set shiftwidth=4
-set smarttab
-set title
-set statusline+=%=%l:%c
-set statusline=[%n]\ [%t]
-set expandtab
-" Always display the status line
-set laststatus=2
-" Enable Elite mode, No ARRRROWWS!!!!
-let g:elite_mode=1
-if get(g:, 'elite_mode')
-	nnoremap <Up>    :resize +2<CR>
-	nnoremap <Down>  :resize -2<CR>
-	nnoremap <Left>  :vertical resize +2<CR>
-	nnoremap <Right> :vertical resize -2<CR>
-endif
+" syntastic mapping
+map <F8> :SyntasticCheck<CR>
+nmap <F9> :lnext<CR>
+nmap <F7> :lprev<CR>
+" git gutter mapping
+nmap ]h <Plug>(GitGutterNextHunk)
+nmap [h <Plug>(GitGutterPrevHunk)
+" NERDTree mapping
+map <C-i> :NERDTreeToggle<CR>
+" Ultisnip mapping
+let g:UltiSnipsExpandTrigger="<C-j>"" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+" EasyAlign
+nmap ga <Plug>(EasyAlign)
+xmap ga <Plug>(EasyAlign)
+"indent guides
+let g:indent_guides_enable_on_vim_startup = 1 
+let g:indent_guides_auto_colors = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=black
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=black 
+""""""""""""end plugin mapping"""""""""""""""""""""""""
 
 
-"no arrow setting
-" Enable highlighting of the current line
-set cursorline
-" Theme and Styling 
-syntax on
-set t_Co=256
-"let base16colorspace=256  " Access colors present in 256 colorspace
-set background=light
-" colorscheme
-colorscheme spacegray 
-let g:spacegray_low_contrast = 1
- 
+
 " ====== guttentags =====
 set statusline+=%{gutentags#statusline()}
-" let g:gutentags_project_root = ['.git']
+ let g:gutentags_project_root = ['.git']
 let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
 "Use the following command to clear the cache quickly:
 "
-"command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir . '/*')
-let g:gutentags_exclude = ['*.css', '*.html', '*.js', '*.json', '*.xml',
+command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir . '/*')
+let g:gutentags_ctags_exclude = ['*.css', '*.html', '*.js', '*.json', '*.xml',
                             \ '*.phar', '*.ini', '*.rst', '*.md',
                             \ '*vendor/*/test*', '*vendor/*/Test*',
                             \ '*vendor/*/fixture*', '*vendor/*/Fixture*',
-                            \ '*var/cache*', '*var/log*']
+                            \ '*var/cache*', '*var/log*','*.']
 let g:gutentags_generate_on_new = 1
 let g:gutentags_generate_on_missing = 1
 let g:gutentags_generate_on_write = 1
 let g:gutentags_generate_on_empty_buffer = 0
+""""""""""""end guttentags"""""""""""""""""""""""""
 
-" Syntastic Configuration
+" syntastic Configuration
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
-map <F8> :SyntasticCheck<CR>
-nmap <F9> :lnext<CR>
-nmap <F7> :lprev<CR>
-
-
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_mode_map = { 'passive_filetypes': ['java']  }
-""=========================
+let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute " ,"trimming empty <", "unescaped &" , "lacks \"action", "is not recognized!", "discarding unexpected"]
+
+""""""""""""end syntastic"""""""""""""""""""""""""
 
 
-" YouCompleteMe setting
-""=========================
+" ycm setting
 let g:ycm_python_interpreter_path = ''
 let g:ycm_python_sys_path = []
 let g:ycm_extra_conf_vim_data = [
@@ -177,47 +181,34 @@ let g:ycm_extra_conf_vim_data = [
   \]
 let g:ycm_global_ycm_extra_conf = '~/global_extra_conf.py'
 
+"""""""""""""end ycm""""""""""""""""""""""""
 
-
-"=========================
 
 " ===== gitgutter ==== 
-"======================
 
-"let g:gitgutter_highlight_lines = 1
-nmap ]h <Plug>(GitGutterNextHunk)
-nmap [h <Plug>(GitGutterPrevHunk)
 " stage gitgutter way "<leader>hs dan undo dengan <leader>hu""
-let g:gitgutter_override_sign_column_highlight = 1
-highlight SignColumn guibg=bg
-highlight SignColumn ctermbg=bg
-" update sign colum every quarter second = default is 4000
-set updatetime=250
-let g:gitgutter_sign_added = '+'
-let g:gitgutter_sign_modified = 'o'
-let g:gitgutter_sign_removed = 'x'
-let g:gitgutter_sign_removed_first_line = '^'
-let g:gitgutter_sign_modified_removed = 'w'
+" let g:gitgutter_override_sign_column_highlight = 1
+" highlight SignColumn guibg=bg
+" highlight SignColumn ctermbg=fg
 
-" Vim-Supertab Configuration
-""=========================
+set updatetime=250 " update sign colum every quarter second = default is 4000
+
+""""""""end gitgutter"""""""""""""""""""""""""""""
+
+" supertab Configuration
 let g:SuperTabDefaultCompletionType = "<TAB>"
-""=========================
+"""""""end supertab""""""""""""""""""""""""""""""
 
-" Vim-UtilSnips Configuration
-"=========================
-" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+" utilSnips Configuration
 
-let g:UltiSnipsExpandTrigger="<C-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsEditSplit="vertical" " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsSnippetsDir = "~/.vim/bundle/ultisnips/Ultisnips"
+"""""""""end ultsnip""""""""""""""""""""""""""""
 
-"=========================
 
-
-" Neocomplete Settings
+" neocomplete Settings
 "=========================
 
 let g:acp_enableAtStartup = 0
@@ -286,7 +277,7 @@ let g:mix_format_on_save = 1
 "neocomplete mapping
 inoremap <expr><C-g>     neocomplete#undo_completion()
 inoremap <expr><C-l>     neocomplete#complete_common_string()
-""inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+"inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 
 " 1 <TAB>: completion.
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
@@ -318,12 +309,12 @@ let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
 let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
 "NOTES yang omni heavy jadiin komen semua atau disesuaikan aja
-"================================================
+"===============end neocomplete=================================
 
 
 
 
-" NERDTree
+" nerdtree
 "=========================
 
 let NERDTreeShowHidden = 1
@@ -331,12 +322,7 @@ let NERDTreeShowBookmarks = 1
 let NERDTreeMinimalUI = 1
 let NERDTreeeDirArrows = 1
 
-map <C-i> :NERDTreeToggle<CR>
-"=========================
-
-
-
-
+"===========end nerdtree==============
 
 
 
