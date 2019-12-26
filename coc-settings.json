@@ -1,0 +1,8 @@
+{
+
+"suggest.autoTrigger": "always",
+"suggest.triggerAfterInsertEnter": true,
+"suggest.minTriggerInputLength": 2
+
+}
+
