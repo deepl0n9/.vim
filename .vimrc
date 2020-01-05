@@ -12,7 +12,16 @@
 """""""""""""""""""""""""""""""""""""
 
 ""set ESC to jj
+augroup every
+  autocmd!
+  au InsertEnter * set norelativenumber 
+  au InsertLeave * set relativenumber 
+augroup END " no number when insert 
 inoremap jj <ESC>
+set shortmess+=c
+set lazyredraw
+set smartcase
+set ignorecase
 set formatoptions-=cro
 set tw=0
 set hidden
@@ -61,7 +70,6 @@ Plugin 'gmarik/Vundle.vim'  " let Vundle manage Vundle, required
 
 " Utility
 Plugin 'junegunn/goyo.vim' "goyo default : ketik :Goyo
-Plugin 'SilVer/ultisnips'
 Plugin 'benmills/vimux'
 Plugin 'scrooloose/nerdtree'
 Plugin 'ludovicchabant/vim-gutentags'
@@ -80,7 +88,6 @@ Plugin 'nathanaelkane/vim-indent-guides'
 " ======== Generic Programming Support 
 Plugin 'sheerun/vim-polyglot'
 Plugin 'neoclide/coc.nvim'
-Plugin 'Shougo/neocomplete.vim'
 Plugin 'tomtom/tcomment_vim'  " * tcomment default : pilih teks/code(visual mode) yg ingin di jadikan komen (vice versa) lalu ketik gc
 Plugin 'vim-syntastic/syntastic'
 Plugin 'xuhdev/SingleCompile.git'
@@ -115,36 +122,45 @@ filetype plugin indent on    " required
 let vim_markdown_preview_github=1
 let g:markdown_fenced_languages = ['css']
 " end markdown
-
 "======== <leader> mapping
+" when make mistake while record macro just undo and fix then stop record
+" paste keystroke inside reqister macro and fix/delete undo and other
+" finally yank to register macro itself
+nnoremap Q @@ 
+let maplocalleader = ","
+map <localleader>w ysiw
+map <localleader>a :set wrap
+nmap <localleader>md :%!/usr/local/bin/Markdown.pl --html4tags <cr>
 let mapleader = " "
 "Markdown to HTML
-nmap <leader>md :%!/usr/local/bin/Markdown.pl --html4tags <cr>
 map <leader> :
 map <S-o> o<ESC>k
 map <leader>q :q!<CR>
 map <leader>w :wq<CR>
-map <leader>g :Git 
 map <leader>e :w<CR>
-map <leader>gn :GitGutterLineHighlightsEnable<CR>
-map <leader>go :GitGutterLineHighlightsDisable<CR>
+map <leader>k :bnext<CR>
+map <leader>j :bprev<CR>
+map <leader>g :Git 
+map <leader>r :so ~/.vimrc<CR> 
+map <leader>ge :GitGutterLineHighlightsEnable<CR>
+map <leader>gu :GitGutterLineHighlightsDisable<CR>
+map <leader>s :split<CR>
+map <leader>v :vsplit<CR>
+map <leader>t :tabnew<CR>
 nnoremap <silent> <leader><Space> :Files<CR>
 """""""""""""""""""""""""""""""""""""
 
 "==== plugin mapping
+" leader coc snippets 
+map <localleader>s :CocCommand snippets.editSnippets
 " :WipeReg to clar buffer
 command! WipeReg for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
 " syntastic mapping
 map <F8> :SyntasticCheck<CR>
 nmap <F9> :lnext<CR>
 nmap <F7> :lprev<CR>
-" git gutter mapping
-nmap ]h <Plug>(GitGutterNextHunk)
-nmap [h <Plug>(GitGutterPrevHunk)
 " NERDTree mapping
 map <C-i> :NERDTreeToggle<CR>
-" Ultisnip mapping
-let g:UltiSnipsExpandTrigger="<C-j>" "Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 " EasyAlign
 nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
@@ -154,9 +170,21 @@ let g:indent_guides_auto_colors = 0
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=black
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=black
 " emmet
-let g:user_emmet_leader_key=','
-""""""""""""end plugin mapping"""""""""""""""""""""""""
+let g:user_emmet_expandword_key = '<C-y>1'
+let g:user_emmet_update_tag = '<C-y>2'
+let g:user_emmet_balancetaginward_key = '<C-y>3'
+let g:user_emmet_balancetagoutward_key = '<C-y>4'
+let g:user_emmet_next_key = '<C-y>5'
+let g:user_emmet_prev_key = '<C-y>6'
+let g:user_emmet_imagesize_key = '<C-y>7'
+let g:user_emmet_togglecomment_key = '<C-y>8'
+let g:user_emmet_splitjointag_key = '<C-y>9'
+let g:user_emmet_anchorizeurl_key = '<C-y>10'
+let g:user_emmet_anchorizesummary_key = '<C-y>11'
+let g:user_emmet_mergelines_key = '<C-y>12'
+let g:user_emmet_codepretty_key = '<C-y>13'
 
+let g:user_emmet_leader_key=','
 "===== fzf====
  set rtp+=/usr/local/opt/fzf
 " ====== guttentags =====
@@ -184,7 +212,7 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_mode_map = { 'passive_filetypes': ['java']  }
-let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute " ,"trimming empty <", "unescaped &" , "lacks \"action", "is not recognized!", "discarding unexpected", "attribute"]
+let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute " ,"trimming empty <", "unescaped &" , "lacks \"action", "is not recognized!", "discarding unexpected", "attribute", "replacing","missing", "inserting"]
 """"""""""""end syntastic"""""""""""""""""""""""""
 
 " ===== gitgutter ==== 
@@ -198,43 +226,45 @@ let g:gitgutter_sign_removed = 'x'
 set updatetime=100 " update sign colum every quarter second = default is 4000
 """"""""end gitgutter"""""""""""""""""""""""""""""
 
-" supertab Configuration
-" let g:SuperTabDefaultCompletionType = "<S-TAB>"
-"""""""end supertab""""""""""""""""""""""""""""""
 
-" utilSnips Configuration
-let g:UltiSnipsJumpForwardTrigger="<c-j>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
-let g:UltiSnipsEditSplit="vertical" " If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsSnippetsDir = "~/.vim/bundle/ultisnips/Ultisnips"
-"""""""""end ultsnip""""""""""""""""""""""""""""
 
-" coc
-" use <tab> for trigger completion and navigate to the next complete item
+" --- coc
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? "\<C-n>" :
+"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ coc#refresh()
+"
+imap <C-j> <Plug>(coc-snippets-expand)
 function! s:check_back_space() abort
   let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
-    autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+  return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
-
-inoremap <silent><expr> <Tab>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<Tab>" :
-      \ coc#refresh()
+let g:coc_snippet_next = '<TAB>'
+let g:coc_snippet_prev = '<S-TAB>'
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
 
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
 " end coc
 
-" neocompletecache
-let g:neocomplete#enable_at_startup = 1
-let g:neocomplete#sources#dictionary#dictionaries = {
-    \ 'default' : '',
-    \ 'vimshell' : $HOME.'/.vimshell_hist',
-    \ 'scheme' : $HOME.'/.gosh_completions'
-        \ }
-
-" end neocomplete
 " omnicomplete
  autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
  autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags

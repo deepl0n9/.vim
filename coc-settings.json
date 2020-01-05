@@ -1,8 +1,7 @@
 {
 
-"suggest.autoTrigger": "always",
-"suggest.triggerAfterInsertEnter": true,
-"suggest.minTriggerInputLength": 2
+"suggest.noselect": true,
+"java.errors.incompleteClasspath.severity": "ignore"
 
 }
 
