@@ -15,10 +15,6 @@ set nocompatible
 set encoding=utf-8
 set background=light
 colorscheme spacegray
-" airline
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail'
-let g:airline#extensions#tabline#buffer_nr_show = 1
 """"""""""""""end default setting"""""""""""""""""""""""
 
 " ===== vundle Configuration 
@@ -30,8 +26,9 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'  " let Vundle manage Vundle, required
 
 " Utility
-Plugin 'junegunn/goyo.vim' "goyo default : ketik :Goyo
+Plugin 'deepl0n9/vim-myvimrc'
 Plugin 'deepl0n9/vim-arrowless'
+Plugin 'junegunn/goyo.vim' "goyo default : ketik :Goyo
 Plugin 'NLKNguyen/papercolor-theme'
 Plugin 'prettier/vim-prettier', {
   \ 'do': 'yarn install',
@@ -69,7 +66,6 @@ Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'junegunn/fzf.vim'
-Plugin 'deepl0n9/vim-myvimrc'
 
 
 "======== vim text object
@@ -101,6 +97,9 @@ nmap <localleader>md :%!/usr/local/bin/Markdown.pl --html4tags <cr>
 map <localleader>v :VimuxPromptCommand<CR>
 map <leader>ge :GitGutterLineHighlightsEnable<CR>
 map <leader>gu :GitGutterLineHighlightsDisable<CR>
+map <C-i> :NERDTreeToggle<CR>
+nmap ga <Plug>(EasyAlign)
+xmap ga <Plug>(EasyAlign)
 
 " ripgrep standart change command with :Files<CR>
 if executable('rg')
@@ -144,17 +143,8 @@ endfunction
 
 " List user command
 " :WipeReg to clear register in  buffer
-command! WipeReg for i in range(34,122) | silent! call setreg(nr2char(i), []) | endfor
-command! Listspace echo 'leader space = -s r (reload) -s j&k (nextbuffer & prev) -s t, v, s (newtab, vsplit, split)'
-command! Listcoma echo 'leader coma = -c w (ysiw (add <"...)) -c , (emmet trigger) '
-command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
 command! Light colorscheme papercolor | set bg=light
 command! Dark colorscheme spacegray | set bg=light
-" NERDTree mapping
-map <C-i> :NERDTreeToggle<CR>
-" EasyAlign
-nmap ga <Plug>(EasyAlign)
-xmap ga <Plug>(EasyAlign)
 "indent guides
 let g:indent_guides_enable_on_vim_startup = 1 
 let g:indent_guides_auto_colors = 0
@@ -195,6 +185,10 @@ let g:gutentags_generate_on_missing = 1
 let g:gutentags_generate_on_write = 1
 let g:gutentags_generate_on_empty_buffer = 0
 """"""""""""end guttentags"""""""""""""""""""""""""
+" airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline#extensions#tabline#buffer_nr_show = 1
 
 
 " ===== gitgutter ==== 
