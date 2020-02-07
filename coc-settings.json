@@ -1,7 +1,8 @@
 {
 
 "suggest.noselect": true,
-"java.errors.incompleteClasspath.severity": "ignore"
+"java.errors.incompleteClasspath.severity": "ignore",
+"tsserver.enableJavascript": ""
 
 }
 

@@ -28,6 +28,7 @@ Plugin 'gmarik/Vundle.vim'  " let Vundle manage Vundle, required
 " Utility
 Plugin 'deepl0n9/vim-myvimrc'
 Plugin 'deepl0n9/vim-arrowless'
+Plugin 'vim-syntastic/syntastic'
 Plugin 'junegunn/goyo.vim' "goyo default : ketik :Goyo
 Plugin 'NLKNguyen/papercolor-theme'
 Plugin 'prettier/vim-prettier', {
@@ -247,6 +248,24 @@ let NERDTreeShowBookmarks = 1
 let NERDTreeMinimalUI = 1
 let NERDTreeeDirArrows = 1
 "===========end nerdtree==============
+" syntastic "
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+function! ToggleSyntastic()
+    for i in range(1, winnr('$'))
+        let bnum = winbufnr(i)
+        if getbufvar(bnum, '&buftype') == 'quickfix'
+            lclose
+            return
+        endif
+    endfor
+    SyntasticCheck
+endfunction
 
-
-
+nnoremap <F8> :call ToggleSyntastic()<CR>
+let g:syntastic_always_populate_loc_list = 0
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_javascript_eslint_exe = 'eslint .'
