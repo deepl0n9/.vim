@@ -1,0 +1,56 @@
+set shortmess+=c
+set lazyredraw
+set smartcase
+set ignorecase
+set formatoptions-=cro
+set tw=0
+set hidden
+set nobackup
+set nowritebackup
+set backspace=indent,eol,start
+set nocompatible
+set number 
+set relativenumber
+set nowrap 
+set shiftwidth=4
+set smarttab
+set title
+set statusline+=%=%l:%c
+set statusline=[%n]\ [%t]
+set expandtab
+set laststatus=2
+set cursorline
+
+call plug#begin()
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+call plug#end()
+
+"standart mapping
+inoremap jj <ESC>
+nnoremap Q @@
+map <S-o> o<ESC>k
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+"leader
+let mapleader = " "
+map <leader> :
+map <leader>q :q!<CR>
+map <leader>w :w<CR>
+map <leader>k :bnext<CR>
+map <leader>j :bprev<CR>
+map <leader>s :split<CR>
+map <leader>v :vsplit<CR>
+"localleader
+let maplocalleader = ","
+map <localleader>w ysiw
+map <localleader>a :set wrap
+map <C-i> :NERDTreeToggle<CR>
+
+" airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline#extensions#tabline#buffer_nr_show = 1
