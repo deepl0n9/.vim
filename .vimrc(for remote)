@@ -1,3 +1,4 @@
+# install vundle first(with sudo) coc extensions by vim coc local
 set shortmess+=c
 set lazyredraw
 set smartcase
@@ -20,12 +21,25 @@ set statusline=[%n]\ [%t]
 set expandtab
 set laststatus=2
 set cursorline
+filetype off
 
-call plug#begin()
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-call plug#end()
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+
+Plugin 'jiangmiao/auto-pairs'
+Plugin 'preservim/nerdtree'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin'tpope/vim-surround'  
+Plugin 'sheerun/vim-polyglot'
+Plugin 'neoclide/coc.nvim'
+Plugin 'tomtom/tcomment_vim' 
+Plugin 'terryma/vim-multiple-cursors' 
+
+
+call vundle#end()
+filetype plugin indent on
 
 "standart mapping
 inoremap jj <ESC>
