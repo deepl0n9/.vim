@@ -27,15 +27,16 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
+Plugin 'VundleVim/Vundle.vim'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'preservim/nerdtree'
 Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin'tpope/vim-surround'  
+Plugin 'vim-airline/vim-airline-themes
+Plugin 'tpope/vim-surround'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'neoclide/coc.nvim'
-Plugin 'tomtom/tcomment_vim' 
-Plugin 'terryma/vim-multiple-cursors' 
+Plugin 'tomtom/tcomment_vim'
+Plugin 'terryma/vim-multiple-cursors'
 
 
 call vundle#end()
@@ -58,6 +59,7 @@ map <leader>k :bnext<CR>
 map <leader>j :bprev<CR>
 map <leader>s :split<CR>
 map <leader>v :vsplit<CR>
+map <leader>r :so ~/.vimrc<CR>
 "localleader
 let maplocalleader = ","
 map <localleader>w ysiw
